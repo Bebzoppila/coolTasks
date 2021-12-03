@@ -1,6 +1,12 @@
+import { FC } from "react";
 import useInput from "../../hooks/useInput";
 
-const Menu = ({ addTodo }) => {
+interface MenuProps {
+  addTodo: (str: string) => void
+}
+
+
+const Menu:FC<MenuProps> = ({ addTodo }) => {
   const [inputValue, updateInputValue] = useInput('')
 
   const onBtnClick = () => {
@@ -10,7 +16,7 @@ const Menu = ({ addTodo }) => {
 
   return (
     <div>
-      <input onChange={(event) => updateInputValue(event.target.value)} value={inputValue} type="text" />
+      <input onChange={updateInputValue} value={inputValue} type="text" />
       <button onClick={onBtnClick}>Добавить</button>
     </div>
   );

@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { TableItemType } from "../../types/store"
 
 export const fetchTable = createAsyncThunk(
     'table/fetchTable',
-    async(limit = 5, { rejectWithValue }) => {
+    async(limit: number = 5, { rejectWithValue }) => {
         try {
-            const response = await fetch(`https://jsonplaceholder.typicode.com/users?_limit=${limit}`)
+            const response = await fetch(`https://jsonplaceholder.typicode.com/posts?_limit=${limit}`)
 
             if (!response.ok) {
                 throw Error('Произошла ошибка')
@@ -15,13 +16,22 @@ export const fetchTable = createAsyncThunk(
         }
     }
 )
+
+interface TableType {
+    table: Array<TableItemType>,
+    tableTitile: string,
+}
+
+const initialState: TableType = {
+    table: [],
+    tableTitile: 'Пользователи'
+} 
+
+
 const tableSlice = createSlice({
     name: 'table',
 
-    initialState: {
-        table: [],
-        tableTitile: 'Пользователи'
-    },
+    initialState,
 
     reducers: {
         addTable: (state) => {

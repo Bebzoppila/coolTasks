@@ -1,4 +1,5 @@
 const TodoItems = ({ todos, updateComplited }) => {
+  
   return (
     <ul>
       {todos.map(({ id, title, completed }) => (

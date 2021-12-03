@@ -8,3 +8,8 @@ export const store = configureStore({
         table: TableSlice,
     },
 });
+
+export type stateType = ReturnType<typeof store.getState>
+export type dispatchType = typeof store.dispatch
+
+console.log();

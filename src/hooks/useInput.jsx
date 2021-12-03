@@ -3,10 +3,10 @@ import { useState } from "react";
 const useInput = (initialState) => {
   const [inputState, setInputState] = useState(initialState);
 
-  const updateInputValue = (text) => {
-    setInputState(text.trim());
+  const updateInputState = (event) => {
+    setInputState(event.target.value);
   };
 
-  return [inputState, updateInputValue]
+  return [inputState, updateInputState]
 }
 export default useInput

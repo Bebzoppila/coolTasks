@@ -1,21 +1,16 @@
 const TableBody = ({ bodyContent }) => {
-
   return (
     <tbody>
       {bodyContent.map((bodyItem) => (
         <tr key={bodyItem.id}>
+          <td>{bodyItem.userId}</td>
           <td>{bodyItem.id}</td>
-          <td>{bodyItem.name}</td>
-          <td>{bodyItem.username}</td>
-          <td>{bodyItem.email}</td>
-          <td>{bodyItem.address.street}</td>
-          <td>{bodyItem.phone}</td>
-          <td>{bodyItem.website}</td>
-          <td>{bodyItem.company.name}</td>
+          <td>{bodyItem.title}</td>
+          <td>{bodyItem.body}</td>
         </tr>
       ))}
     </tbody>
   );
 };
 
-export default TableBody
+export default TableBody;

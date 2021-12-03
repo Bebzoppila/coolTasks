@@ -1,4 +1,4 @@
-import Menu from "./Menu";
+import Menu from "./Menu.tsx";
 import TodoItems from "./TodoItems";
 import { useSelector, useDispatch } from "react-redux";
 import { addTodo, updateComplitedTodo } from "../../store/slices/TodoSlice";

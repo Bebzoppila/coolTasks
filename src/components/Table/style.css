@@ -27,3 +27,48 @@
     background-color: #04AA6D;
     color: white;
 }
+
+.table {
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.menu {
+    margin: 20px 0px;
+}
+
+.active__select {
+    padding: 4px 6px;
+    border: 1px solid #000;
+    cursor: pointer;
+}
+
+.select__conten {
+    max-height: 0px;
+    overflow: hidden;
+    transition: all 0.3s;
+    position: absolute;
+    z-index: 2;
+    background-color: #fff;
+    left: 0;
+    right: 0;
+}
+
+.select__conten--active {
+    max-height: 150px;
+    /* overflow: auto; */
+}
+
+.select__option {
+    cursor: pointer;
+}
+
+.select {
+    position: relative;
+}
+
+.select__option:hover {
+    color: #04AA6D;
+}

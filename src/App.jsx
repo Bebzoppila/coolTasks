@@ -10,7 +10,7 @@ function App() {
 
   useEffect(() => {
     dispatcher(fetchTodo(10));
-    dispatcher(fetchTable(20));
+    dispatcher(fetchTable(50));
   }, [dispatcher]);
 
   return (
