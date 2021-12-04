@@ -1,5 +1,11 @@
-const TodoItems = ({ todos, updateComplited }) => {
-  
+import { TodoItemType } from "../../types/store";
+
+interface todoItemProps {
+  todos: Array<TodoItemType>;
+  updateComplited: (id: number) => void;
+}
+
+const TodoItems = ({ todos, updateComplited }: todoItemProps) => {
   return (
     <ul>
       {todos.map(({ id, title, completed }) => (

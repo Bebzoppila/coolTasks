@@ -36,6 +36,7 @@ const TodoSlice = createSlice({
 
   reducers: {
     addTodo: (state, action: PayloadAction<TodoItemType>) => {
+      console.log(action.payload);
       state.todos.push(action.payload);
     },
 

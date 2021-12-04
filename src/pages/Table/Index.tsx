@@ -4,13 +4,16 @@ import TableHead from "./TableHead";
 import TableBody from "./TableBody";
 import TableMenu from "./TableMenu";
 import useFilter from "../../hooks/useFilter";
+import { TableItemField } from "../../types/store"
+import { FC } from "react";
 
-const Table = () => {
+const Table:FC = () => {
   const { table, tableTitile } = useAppSelector((store) => store.table);
-  const [filterDate, updateFilter] = useFilter(table);
   
-  const tableCoulumName = Object.keys(table[0] || []);
-
+  const tableCoulumName = Object.keys(table[0] || {}) as Array<TableItemField>;
+  
+  const [filterDate, updateFilter] = useFilter(table, tableCoulumName);
+  
   return (
     <div className="table">
       <p>{tableTitile}</p>

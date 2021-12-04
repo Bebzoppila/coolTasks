@@ -1,6 +1,6 @@
-import Menu from "./components/Menu";
+import Menu from "./pages/Menu";
 import { Routes, Route } from "react-router-dom";
-import routers from "./router.js";
+import routers from "./router";
 import { fetchTable } from "./store/slices/TableSlice";
 import { fetchTodo } from "./store/slices/TodoSlice";
 import { useDispatch } from "react-redux";

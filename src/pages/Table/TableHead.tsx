@@ -1,4 +1,10 @@
-const TableHead = ({ headValues }) => {
+import { FC } from "react";
+
+type TableHeaderProps = {
+  headValues:Array<string>,
+}
+
+const TableHead:FC<TableHeaderProps> = ({ headValues }) => {
   return (
     <thead>
       <tr>

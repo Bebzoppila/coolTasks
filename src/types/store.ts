@@ -11,3 +11,5 @@ export interface TableItemType {
   title: string;
   body: string;
 }
+
+export type TableItemField = "userId" | "id" | "title" | "body"

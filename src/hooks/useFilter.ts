@@ -1,38 +1,51 @@
 import { useMemo, useState } from "react";
-import { TableItemType } from "../types/store"
-type useFilterType = Array<TableItemType>
-type filterStateType = {
-  field: 'userId' | "id" | 'title' | "body"
-  value:string
-}
 
-function useFilter(data: useFilterType){
-  const [filterState, setFilterState] = useState<filterStateType>({ field: "id", value: "" });
+export type filterStateType = {
+  field: number;
+  value: string;
+};
+
+type useFilterReturn<T> = [Array<T>, ({}: filterStateType) => void];
+
+function useFilter<T extends object, U extends keyof T>(
+  data: Array<T>,
+  fields: Array<U>
+): useFilterReturn<T> {
+  const filterFields = fields;
+  const [activeFields, setActivField] = useState<filterStateType>({
+    field: 1,
+    value: "",
+  });
 
   const strTolover = (str: string) => {
     return str.toLowerCase();
   };
-  
-  
+
   const filterFromDate = () => {
-    if (!filterState.field) {
+    if (!activeFields.field) {
       return data;
     }
-    console.log(filterState);
+
     return data.filter((dataItem) =>
-      strTolover(String(dataItem[filterState.field])).includes(
-        strTolover(filterState.value)
+      strTolover(String(dataItem[filterFields[activeFields.field]])).includes(
+        strTolover(activeFields.value)
       )
     );
   };
-  const updateFilter = ({field, value}:filterStateType) =>
-    setFilterState({ ...filterState, field, value });
 
-  const memoFilter = useMemo(() => filterFromDate(), [filterState, data]);
+  const updateFilter = ({ field, value }: filterStateType) =>
+    setActivField({
+      ...activeFields,
+      field: Math.min(Math.max(1, field), filterFields.length),
+      value,
+    });
+
+  const memoFilter = useMemo(
+    () => filterFromDate(),
+    [activeFields.field, data]
+  );
 
   return [memoFilter, updateFilter];
-
-
 }
 
 export default useFilter;

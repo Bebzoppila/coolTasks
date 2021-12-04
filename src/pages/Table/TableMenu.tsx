@@ -1,14 +1,21 @@
 import { useEffect, useState } from "react";
 import useInput from "../../hooks/useInput";
 import CustomSelect from "./CustomSelect";
-const TableMenu = ({ updateFilter, filterField }) => {
+import { filterStateType } from "../../hooks/useFilter"
+import { TableItemField } from "../../types/store"
+interface tableMenuProps{
+  updateFilter: ({}:filterStateType) => void,
+  filterField:  Array<TableItemField>
+}
+
+const TableMenu = ({ updateFilter, filterField }:tableMenuProps) => {
   const [inputValue, updateInputValue] = useInput("");
-  const [select, updateSelect] = useState(filterField[0]);
+  const [select, updateSelect] = useState<number>(1);
 
   const newFilter = () => {
     updateFilter({field:select, value:inputValue})
   }
-
+  
   useEffect(() => {
     if (inputValue.length === 0) {
       newFilter()
@@ -19,7 +26,7 @@ const TableMenu = ({ updateFilter, filterField }) => {
 
   return (
     <div className="menu">
-      <CustomSelect updateSelect={updateSelect} selectValue={select} option={filterField} />
+      <CustomSelect updateSelect={(indx) => updateSelect(indx)} activIntex={select} option={filterField} />
       <input onChange={updateInputValue} value={inputValue} type="text" />
       <button onClick={() => newFilter()}>Поиск</button>
     </div>

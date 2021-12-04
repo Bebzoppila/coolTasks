@@ -1,18 +1,20 @@
-import Menu from "./Menu.tsx";
+import Menu from "./Menu";
 import TodoItems from "./TodoItems";
-import { useSelector, useDispatch } from "react-redux";
 import { addTodo, updateComplitedTodo } from "../../store/slices/TodoSlice";
+import { useAppSelector, useAppDispatch } from "../../hooks/redux"
+import { TodoItemType } from "../../types/store"
+import { FC } from "react";
 
-const TodoList = () => {
-  const { todos, erors } = useSelector((store) => store.todos);
-  const dispatcher = useDispatch();
+const TodoList:FC = () => {
+  const { todos, erors } = useAppSelector((store) => store.todos);
+  const dispatcher = useAppDispatch();
 
-  const addNewTodo = (text) => {
-    let newTodoItem = { id: Date.now(), complited: false, title: text };
+  const addNewTodo = (text:string) => {
+    let newTodoItem:TodoItemType = { id: Date.now(), completed: false, title: text, userId:Math.floor(Math.random() * 11) };
     dispatcher(addTodo(newTodoItem));
   };
 
-  const updateTodo = (id) => {
+  const updateTodo = (id:number) => {
     dispatcher(updateComplitedTodo(id));
   };
 

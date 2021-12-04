@@ -1,4 +1,10 @@
-const TableBody = ({ bodyContent }) => {
+import { FC } from "react";
+import { TableItemType } from "../../types/store"
+type TableBodyProps = {
+  bodyContent: Array<TableItemType>
+}
+
+const TableBody:FC<TableBodyProps> = ({ bodyContent }) => {
   return (
     <tbody>
       {bodyContent.map((bodyItem) => (
