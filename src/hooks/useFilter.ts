@@ -1,49 +1,38 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useCallback } from "react";
 
-export type filterStateType = {
-  field: number;
-  value: string;
-};
+type filterReturn<T> = [
+  Array<T>,
+  ({}: { field: keyof T; value: string }) => void
+];
 
-type useFilterReturn<T> = [Array<T>, ({}: filterStateType) => void];
-
-function useFilter<T extends object, U extends keyof T>(
-  data: Array<T>,
-  fields: Array<U>
-): useFilterReturn<T> {
-  const filterFields = fields;
-  const [activeFields, setActivField] = useState<filterStateType>({
-    field: 1,
-    value: "",
-  });
+function useFilter<T extends object>(data: Array<T>, field: keyof T): filterReturn<T> {
+  type filterStateType = { field: keyof T; value: string; }
+  const [activeFields, setActivField] = useState<filterStateType>({field: field,value: "",});
 
   const strTolover = (str: string) => {
     return str.toLowerCase();
   };
 
-  const filterFromDate = () => {
+  const filterFromDate = useCallback(() => {
     if (!activeFields.field) {
       return data;
     }
 
     return data.filter((dataItem) =>
-      strTolover(String(dataItem[filterFields[activeFields.field]])).includes(
+      strTolover(String(dataItem[activeFields.field])).includes(
         strTolover(activeFields.value)
       )
     );
-  };
+  }, [activeFields.value,activeFields.field, data]);
 
-  const updateFilter = ({ field, value }: filterStateType) =>
+  const updateFilter = ({ field, value }: { field: keyof T; value: string }) =>
     setActivField({
       ...activeFields,
-      field: Math.min(Math.max(1, field), filterFields.length),
+      field,
       value,
     });
 
-  const memoFilter = useMemo(
-    () => filterFromDate(),
-    [activeFields.field, data]
-  );
+  const memoFilter = useMemo(() => filterFromDate(), [filterFromDate]);
 
   return [memoFilter, updateFilter];
 }

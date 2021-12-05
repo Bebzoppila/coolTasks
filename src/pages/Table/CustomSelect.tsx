@@ -2,19 +2,19 @@ import { useState } from "react";
 
 type CustomSelectType<T> = {
   option: Array<T>;
-  activIntex: number;
-  updateSelect: (indx: number) => void;
+  activSelect: T;
+  updateSelect: (newSelect: T) => void;
 };
 
 function CustomSelect<T>({
   option,
-  activIntex,
+  activSelect,
   updateSelect,
 }: CustomSelectType<T>) {
   const [selectIsOpen, setSelectIsOpen] = useState(false);
 
-  const setNewSelect = (indx: number) => {
-    updateSelect(indx);
+  const setNewSelect = (newSelect: T) => {
+    updateSelect(newSelect);
     setSelectIsOpen(false);
   };
 
@@ -27,15 +27,15 @@ function CustomSelect<T>({
         onClick={() => setSelectIsOpen(!selectIsOpen)}
         className="active__select"
       >
-        {option[activIntex] || "Выберите значение"}
+        {activSelect || "Выберите значение"}
       </div>
       <div className={selecIsOpenClass()}>
-        {option.map((optionElement, indx) => (
+        {option.map((optionElement) => (
           <div
             key={String(optionElement)}
-            onClick={() => setNewSelect(indx)}
+            onClick={() => setNewSelect(optionElement)}
             aria-selected={
-              option[activIntex] === optionElement ? "true" : "false"
+              activSelect === optionElement ? "true" : "false"
             }
             role="option"
             className="select__option"
