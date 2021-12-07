@@ -7,6 +7,7 @@ const Menu = () => {
                 <>
                 <Link to={routerMap.table}>Табилца</Link>
                 <Link to={routerMap.todo} >Список дел</Link>
+                <Link to={routerMap.pharmacy} >Аптечная система</Link>
                 </>
             }
         </div>

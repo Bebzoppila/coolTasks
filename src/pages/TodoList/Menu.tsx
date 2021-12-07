@@ -10,8 +10,10 @@ const Menu:FC<MenuProps> = ({ addTodo }) => {
   const [inputValue, updateInputValue] = useInput('')
 
   const onBtnClick = () => {
-    addTodo(inputValue);
-    updateInputValue("");
+    if(inputValue.length > 0){
+      addTodo(inputValue);
+      updateInputValue("");
+    }
   };
 
   return (

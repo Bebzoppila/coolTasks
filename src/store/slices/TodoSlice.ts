@@ -40,6 +40,10 @@ const TodoSlice = createSlice({
       state.todos.push(action.payload);
     },
 
+    deleteTodo:(state, action:PayloadAction<number>) => {
+      state.todos = state.todos.filter(todoItem => todoItem.id != action.payload)
+    },
+
     updateComplitedTodo: (state, action: PayloadAction<number>) => {
       let id = action.payload;
       state.todos = state.todos.map((todoItem) =>
@@ -59,4 +63,4 @@ const TodoSlice = createSlice({
 
 export default TodoSlice.reducer;
 
-export const { addTodo, updateComplitedTodo } = TodoSlice.actions;
+export const { addTodo, updateComplitedTodo, deleteTodo } = TodoSlice.actions;

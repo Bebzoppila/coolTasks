@@ -5,9 +5,18 @@ type filterReturn<T> = [
   ({}: { field: keyof T; value: string }) => void
 ];
 
-function useFilter<T extends object>(data: Array<T>, field: keyof T): filterReturn<T> {
-  type filterStateType = { field: keyof T; value: string; }
-  const [activeFields, setActivField] = useState<filterStateType>({field: field,value: "",});
+const useFilter: <T extends object>(
+  data: Array<T>,
+  field: keyof T
+) => filterReturn<T> = (data, field) => {
+
+  type dataItem = keyof typeof data[0];
+  type filterStateType = { field: dataItem; value: string };
+  
+  const [activeFields, setActivField] = useState<filterStateType>({
+    field: field,
+    value: "",
+  });
 
   const strTolover = (str: string) => {
     return str.toLowerCase();
@@ -23,9 +32,9 @@ function useFilter<T extends object>(data: Array<T>, field: keyof T): filterRetu
         strTolover(activeFields.value)
       )
     );
-  }, [activeFields.value,activeFields.field, data]);
+  }, [activeFields.value, activeFields.field, data]);
 
-  const updateFilter = ({ field, value }: { field: keyof T; value: string }) =>
+  const updateFilter = ({ field, value }: { field: dataItem; value: string }) =>
     setActivField({
       ...activeFields,
       field,
@@ -35,6 +44,6 @@ function useFilter<T extends object>(data: Array<T>, field: keyof T): filterRetu
   const memoFilter = useMemo(() => filterFromDate(), [filterFromDate]);
 
   return [memoFilter, updateFilter];
-}
+};
 
 export default useFilter;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useInput from "../../hooks/useInput";
-import CustomSelect from "./CustomSelect";
+import CustomSelect from "../CustomSelect";
 import { TableItemType } from "../../types/store";
 
 type updateFilterType = ({}:{

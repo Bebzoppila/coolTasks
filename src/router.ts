@@ -1,7 +1,7 @@
 import TodoList from "./pages/TodoList/index";
 import Table from "./pages/Table/Index";
 import React from "react";
-
+import Pharmacy from "./pages/Pharmacy"
 type RoutType = {
   path: string;
   component: React.FC;
@@ -20,6 +20,11 @@ const router: RoutersType = [
     path: "table",
     component: Table,
     name: "table",
+  },
+  {
+    path: "pharmacy",
+    component: Pharmacy,
+    name: "pharmacy",
   },
 ];
 

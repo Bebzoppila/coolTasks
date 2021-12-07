@@ -57,8 +57,9 @@
 }
 
 .select__conten--active {
-    max-height: 150px;
-    /* overflow: auto; */
+    max-height: 200px;
+    height: auto;
+    overflow: auto;
 }
 
 .select__option {
@@ -67,6 +68,8 @@
 
 .select {
     position: relative;
+    width: 300px;
+    text-align: center;
 }
 
 .select__option:hover {

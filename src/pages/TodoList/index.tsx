@@ -1,6 +1,6 @@
 import Menu from "./Menu";
 import TodoItems from "./TodoItems";
-import { addTodo, updateComplitedTodo } from "../../store/slices/TodoSlice";
+import { addTodo, updateComplitedTodo, deleteTodo } from "../../store/slices/TodoSlice";
 import { useAppSelector, useAppDispatch } from "../../hooks/redux"
 import { TodoItemType } from "../../types/store"
 import { FC } from "react";
@@ -18,13 +18,17 @@ const TodoList:FC = () => {
     dispatcher(updateComplitedTodo(id));
   };
 
+  const deleteTodoItem = (id:number) => {
+    dispatcher(deleteTodo(id))
+  }
+
   return (
     <div className="todo-list">
       <Menu addTodo={addNewTodo} />
       {erors ? (
         <h2>Произошла ошибка при загрузке данных</h2>
       ) : (
-        <TodoItems updateComplited={updateTodo} todos={todos} />
+        <TodoItems deleteTodoItem={deleteTodoItem} updateComplited={updateTodo} todos={todos} />
       )}
     </div>
   );

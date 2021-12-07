@@ -11,3 +11,9 @@ export interface TableItemType {
   title: string;
   body: string;
 }
+
+export interface PhamancyItemType {
+  id:number,
+  name:string,
+  descriptions:string,
+}
