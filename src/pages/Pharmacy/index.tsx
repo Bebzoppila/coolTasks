@@ -3,7 +3,7 @@ import "./style.sass";
 import { useAppSelector } from "../../hooks/redux";
 import CustomSelect from "../CustomSelect";
 import PhamancyBody from "./PhamancyBody";
-import {getInfoFromPhamancy, getInfoSideEffects} from "./api";
+import { getMedInfoFromPhamancy, getInfoSideEffects } from "./api";
 
 export type MedicationType = {
   form: string;
@@ -12,36 +12,43 @@ export type MedicationType = {
 };
 
 export type SideEffectsType = {
-  name:string,
-}
-
-type PhamancyDataType = {
-  medications: Array<MedicationType> | [];
-  sideEffects: Array<SideEffectsType>
+  name: string;
+};
+type MedicalItemType = {
+  manufacturer: string;
+  price: number;
+  sideeffects: Array<SideEffectsType>;
 };
 
 const Phamancy: FC = () => {
   const phamancy = useAppSelector((store) => store.pharmacy.phamancy);
-  const phamancyNames: Array<string> = phamancy.map((ph) => ph.name);
-  const [phamancyActive, setPhamancyActive] = useState<string>(
-    phamancyNames[0]
-  );
-  const [phamancyData, setPhamancyData] = useState<PhamancyDataType>({ medications: [], sideEffects:[] });
+  const [phamancyActive, setPhamancyActive] = useState<string>("");
+
+  const [activeMedications, setActiveMedications] = useState<
+    Array<MedicationType>
+  >([]);
+  const [medicationInf, setMedicationInf] = useState<MedicalItemType>({
+    manufacturer: "",
+    price: 0,
+    sideeffects: [],
+  });
 
   const updatePhamancyActive = (newPhamancy: string) => {
     setPhamancyActive(newPhamancy);
   };
 
-  const getInfo = async () => {
-    let phamancyMed:Array<MedicationType> = await getInfoFromPhamancy(phamancyActive);
-    setPhamancyData({...phamancyData, medications:[...phamancyMed], sideEffects:[]})
+  const updateActiveMedications = async () => {
+    let phamancyMed: Array<MedicationType> = await getMedInfoFromPhamancy(
+      phamancyActive
+    );
+    setActiveMedications([...phamancyMed]);
+    setMedicationInf({ manufacturer: "", price: 0, sideeffects: [] });
   };
 
-  const loadSideEffectsInfo = async (medName: string) => {
-    let sideEffectsMed:Array<SideEffectsType> = await getInfoSideEffects(medName);
-    setPhamancyData({...phamancyData, sideEffects:sideEffectsMed})
-  }
-
+  const loadMedicationInfo = async (medName: string) => {
+    let medicationInfo: MedicalItemType = await getInfoSideEffects(medName);
+    setMedicationInf(medicationInfo);
+  };
 
   return (
     <div className="phamancy">
@@ -53,12 +60,18 @@ const Phamancy: FC = () => {
           <CustomSelect
             updateSelect={updatePhamancyActive}
             activSelect={phamancyActive}
-            option={phamancyNames}
+            option={phamancy.map((ph) => ph.name)}
           />
-          <button onClick={getInfo} className="phamancy__btn">
+          <button onClick={updateActiveMedications} className="phamancy__btn">
             Запросить даныне
           </button>
-          <PhamancyBody loadSideEffectsInfo={loadSideEffectsInfo} sideEffects={phamancyData.sideEffects} medication={phamancyData.medications} />
+          <PhamancyBody
+            loadSideEffectsInfo={loadMedicationInfo}
+            sideEffects={medicationInf.sideeffects}
+            medication={activeMedications}
+            medicationPrice={medicationInf.price}
+            manufacturer={medicationInf.manufacturer}
+          />
         </div>
       </div>
     </div>

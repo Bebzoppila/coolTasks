@@ -19,20 +19,20 @@ def index():
 
 @app.route('/api/diseases')
 def diseases():
-    phamancy = request.args.get('phamancy')
+    phamancy = request.args.get('pharmacy')
     if not phamancy:
         all_diseases = sqlRequest(
             "SELECT id_diseases, diseases_name, diseases_descriptions FROM diseases")
         diseases_columns = ('id', 'name', 'descriptions')
         return jsonify(generateTupliInDate(all_diseases, diseases_columns))
     else:
+
         phamancy_inf = sqlRequest(f"""
                                     SELECT medication.name_med, medication.img, medication.form_med FROM diseases 
                                     INNER JOIN medication_diseases ON medication_diseases.id_diseases = diseases.id_diseases
                                     INNER JOIN medication ON medication.id_med = medication_diseases.id_med
                                     WHERE diseases.diseases_name = '{phamancy}'
                                     """)
-        # generateTupliInDate(phamancy_inf, ('name', 'form'))
         return jsonify(generateTupliInDate(phamancy_inf, ('name', 'img', 'form')))
 
 
@@ -47,7 +47,19 @@ def sideEffects():
                     INNER JOIN sideeffects ON sideeffects.id_sideEffects = medication_sideeffects.id_sideEffects
                     WHERE medication.name_med = '{medication}'
                 """)
-    return jsonify(generateTupliInDate(side_effects_inf, ('name',)))
+    price_med = sqlRequest(
+        f"SELECT price_med from medication WHERE name_med='{medication}'")
+    side_effects_inf = generateTupliInDate(side_effects_inf, ('name',))
+    manufacturer_name = sqlRequest(f"""
+                    SELECT manufacturer.name_man from medication 
+                    INNER JOIN manufacturer_medication ON manufacturer_medication.id_med = medication.id_med
+                    INNER JOIN manufacturer ON manufacturer.id_man = manufacturer_medication.id_man
+                    WHERE medication.name_med = '{medication}'
+     """)
+
+    print(price_med[0])
+    return jsonify({'sideeffects': side_effects_inf, 'price': price_med[0][0], 'manufacturer': manufacturer_name[0][0]})
+
 
 if __name__ == "__main__":
     app.run(debug=True)

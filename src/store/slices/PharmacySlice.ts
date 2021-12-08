@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { PhamancyItemType } from "../../types/store"
 
 export const fetchPhamancy = createAsyncThunk(
-    'phamancy/fetchPhamancy',
+    'phamancy/fetchPhamancy',   
     async(_, { rejectWithValue }) => {
         try {
             const response = await fetch(`http://127.0.0.1:5000/api/diseases`)
