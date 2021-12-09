@@ -1,13 +1,13 @@
 import { FC } from "react";
-import { MedicationType } from "./index";
+import { MedicationsType } from "../../types/store";
 type PhamancyMedicationsType = {
-  medications: Array<MedicationType>;
-  loadSideEffectsInfo: (medName: string) => void;
+  medications: Array<MedicationsType>;
+  loadMedicametionInfo: (medName: string) => void;
 };
 
 const PhamancyMedications: FC<PhamancyMedicationsType> = ({
   medications,
-  loadSideEffectsInfo,
+  loadMedicametionInfo,
 }) => {
   return (
     <div className="phamancy-body__item phamancy-medication phamancy-body__medication">
@@ -24,7 +24,7 @@ const PhamancyMedications: FC<PhamancyMedicationsType> = ({
               alt=""
             />
             <button
-              onClick={() => loadSideEffectsInfo(medItem.name)}
+              onClick={() => loadMedicametionInfo(medItem.name)}
               className="phamancy-medication__btn"
             >
               Узнать больше информации

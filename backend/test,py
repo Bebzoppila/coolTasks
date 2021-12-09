@@ -1,0 +1,73 @@
+from django.shortcuts import render
+from django.http import JsonResponse, HttpResponse
+import pymysql
+from django.template import Context, loader
+
+def sqlRequest(sqlText: str) -> list:
+    try:
+        result = []
+        con = pymysql.connect(host='141.8.193.236', user='f0591940_pharmacy',
+                              password='Zrhenjq12', database='f0591940_pharmacy')
+        with con.cursor() as cursor:
+            cursor.execute(sqlText)
+            result = cursor.fetchall()
+        return result
+    except Exception as Errror:
+        print(Errror)
+    finally:
+        con.close()
+
+def generateTupliInDate(data, columns):
+    return [
+        {colum: diseasesItem[key] for key, colum in enumerate(columns)}
+        for diseasesItem in data
+    ]
+
+def index(request):
+    if 'pharmacy' not in request.GET:
+        all_diseases = sqlRequest(
+            "SELECT id_diseases, diseases_name, diseases_descriptions FROM diseases")
+        diseases_columns = ('id', 'name', 'descriptions')
+        all_diseases = generateTupliInDate(all_diseases, diseases_columns)
+        return JsonResponse(all_diseases, safe=False)
+        
+    pharmacy = request.GET['pharmacy']
+    pharmacy_inf = sqlRequest(f"""
+                            SELECT medication.name_med, medication.img, medication.form_med FROM diseases 
+                            INNER JOIN medication_diseases ON medication_diseases.id_diseases = diseases.id_diseases
+                            INNER JOIN medication ON medication.id_med = medication_diseases.id_med
+                            WHERE diseases.diseases_name = '{pharmacy}'
+                            """)
+    pharmacy_inf = generateTupliInDate(pharmacy_inf, ('name', 'img', 'form'))
+    return JsonResponse(pharmacy_inf, safe=False)
+
+
+def sideEffects(request):
+    medic = 'Нурофен'
+    if 'medication' in request.GET :
+        medic = request.GET['medication']
+    side_effects_inf = sqlRequest(f""" 
+                                SELECT sideeffects.name_sideEffects FROM medication
+                                INNER JOIN medication_sideeffects ON medication_sideeffects.id_med = medication.id_med
+                                INNER JOIN sideeffects ON sideeffects.id_sideEffects = medication_sideeffects.id_sideEffects
+                                WHERE medication.name_med = '{medic}'
+                            """)
+    pharmacy_inf = generateTupliInDate(side_effects_inf, ('name',))
+    price_med = sqlRequest(
+        f"SELECT price_med from medication WHERE name_med='{medic}'")
+    manufacturer_name = sqlRequest(f"""
+                    SELECT manufacturer.name_man from medication 
+                    INNER JOIN manufacturer_medication ON manufacturer_medication.id_med = medication.id_med
+                    INNER JOIN manufacturer ON manufacturer.id_man = manufacturer_medication.id_man
+                    WHERE medication.name_med = '{medic}'
+     """)
+    print(pharmacy_inf)
+    return JsonResponse({'sideeffects': side_effects_inf, 'price': price_med[0][0], 'manufacturer': manufacturer_name[0][0]}, safe=False)
+    
+    
+def templTest(request):
+    return render(request, 'index.html')
+    
+    
+    
+    

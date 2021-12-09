@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import routers from "./router";
 import { fetchTable } from "./store/slices/TableSlice";
 import { fetchTodo } from "./store/slices/TodoSlice";
-import { fetchPhamancy } from "./store/slices/PharmacySlice"
+import { fetchDiseases } from "./store/slices/PharmacySlice"
 import { useDispatch } from "react-redux";
 import { useEffect } from "react"
 function App() {
@@ -12,7 +12,7 @@ function App() {
   useEffect(() => {
     dispatcher(fetchTodo(10));
     dispatcher(fetchTable(50));
-    dispatcher(fetchPhamancy())
+    dispatcher(fetchDiseases())
   }, [dispatcher]);
 
   return (

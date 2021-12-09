@@ -1,55 +1,29 @@
 import { FC, useState } from "react";
 import "./style.sass";
-import { useAppSelector } from "../../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import CustomSelect from "../CustomSelect";
 import PhamancyBody from "./PhamancyBody";
-import { getMedInfoFromPhamancy, getInfoSideEffects } from "./api";
-
-export type MedicationType = {
-  form: string;
-  img: string;
-  name: string;
-};
-
-export type SideEffectsType = {
-  name: string;
-};
-type MedicalItemType = {
-  manufacturer: string;
-  price: number;
-  sideeffects: Array<SideEffectsType>;
-};
+import { DiseasesItemType } from "../../types/store"
+import { fetchMedicametions, fetchMedicametionInfo } from "../../store/slices/PharmacySlice"
 
 const Phamancy: FC = () => {
-  const phamancy = useAppSelector((store) => store.pharmacy.phamancy);
-  const [phamancyActive, setPhamancyActive] = useState<string>("");
+  const {diseases, activeMedicametions, medicationInf} = useAppSelector((store) => store.pharmacy);
+  const dispacher = useAppDispatch()
 
-  const [activeMedications, setActiveMedications] = useState<
-    Array<MedicationType>
-  >([]);
-  const [medicationInf, setMedicationInf] = useState<MedicalItemType>({
-    manufacturer: "",
-    price: 0,
-    sideeffects: [],
-  });
+  const [diseasesActive, setDiseasesActive] = useState<string>(diseases[0]?.name)
 
-  const updatePhamancyActive = (newPhamancy: string) => {
-    setPhamancyActive(newPhamancy);
-  };
+  const updateActiveDiseases = (newDiseases:string) => {
+    setDiseasesActive(newDiseases)
+  }
 
-  const updateActiveMedications = async () => {
-    let phamancyMed: Array<MedicationType> = await getMedInfoFromPhamancy(
-      phamancyActive
-    );
-    setActiveMedications([...phamancyMed]);
-    setMedicationInf({ manufacturer: "", price: 0, sideeffects: [] });
-  };
+  const loadMedicametions = () => {
+    dispacher(fetchMedicametions(diseasesActive))
+  }
 
-  const loadMedicationInfo = async (medName: string) => {
-    let medicationInfo: MedicalItemType = await getInfoSideEffects(medName);
-    setMedicationInf(medicationInfo);
-  };
-
+  const loadMedicametionInfo = (medName:string) => {
+    dispacher(fetchMedicametionInfo(medName))
+  }
+  console.log(medicationInf);
   return (
     <div className="phamancy">
       <div className="container">
@@ -58,17 +32,17 @@ const Phamancy: FC = () => {
             Выберите болезнь для получения дополнительной информации
           </h2>
           <CustomSelect
-            updateSelect={updatePhamancyActive}
-            activSelect={phamancyActive}
-            option={phamancy.map((ph) => ph.name)}
+            updateSelect={updateActiveDiseases}
+            activSelect={diseasesActive}
+            option={diseases.map((ph) => ph.name)}
           />
-          <button onClick={updateActiveMedications} className="phamancy__btn">
+          <button onClick={loadMedicametions} className="phamancy__btn">
             Запросить даныне
           </button>
           <PhamancyBody
-            loadSideEffectsInfo={loadMedicationInfo}
+            loadMedicametionInfo={loadMedicametionInfo}
             sideEffects={medicationInf.sideeffects}
-            medication={activeMedications}
+            medication={activeMedicametions}
             medicationPrice={medicationInf.price}
             manufacturer={medicationInf.manufacturer}
           />

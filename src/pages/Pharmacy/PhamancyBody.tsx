@@ -1,11 +1,11 @@
 import { FC } from "react";
-import { MedicationType, SideEffectsType } from "./index";
+import { MedicationsType, SideEffectsType } from "../../types/store";
 import PhamancyMedications from "./PhamancyMedications";
 import PharmacyInf from "./PharmacyInf";
 type PhamancyBodyProps = {
-  medication: Array<MedicationType>;
+  medication: Array<MedicationsType>;
   sideEffects: Array<SideEffectsType>;
-  loadSideEffectsInfo: (medName: string) => void;
+  loadMedicametionInfo: (medName: string) => void;
   medicationPrice: number;
   manufacturer: string;
 };
@@ -15,7 +15,7 @@ const PhamancyBody: FC<PhamancyBodyProps> = ({
   medicationPrice,
   medication,
   sideEffects,
-  loadSideEffectsInfo,
+  loadMedicametionInfo,
 }) => {
   if (medication.length == 0) {
     return <h3>Данных нет</h3>;
@@ -24,7 +24,7 @@ const PhamancyBody: FC<PhamancyBodyProps> = ({
   return (
     <div className="phamancy-body">
       <PhamancyMedications
-        loadSideEffectsInfo={loadSideEffectsInfo}
+        loadMedicametionInfo={loadMedicametionInfo}
         medications={medication}
       />
       <PharmacyInf

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { SideEffectsType } from "./index";
+import { SideEffectsType } from "../../types/store";
 type PharmacyInfProps = {
   medicationPrice: number;
   manufacturer: string;
